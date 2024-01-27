@@ -1,4 +1,4 @@
-import NextAuth, { DefaultSession } from "next-auth";
+import NextAuth, { DefaultSession, Session } from "next-auth";
 import {PrismaAdapter} from "@auth/prisma-adapter";
 
 import { db } from "./lib/db";
@@ -31,18 +31,6 @@ export const {
         }
     },
     callbacks: {
-        async session({session, token}) {
-            console.log({sessionToken: token});
-            if(token.sub && session.user) {
-                session.user.id = token.sub;
-            }
-
-            if(token.role && session.user) {
-                session.user.role = token.role;
-            }
-
-            return session;
-        },
         async jwt({token}) {
             if(!token.sub) return token;
 
@@ -53,6 +41,18 @@ export const {
             token.role = existingUser.role;
             
             return token;
+        },
+        async session({session, token}:{session: Session, token?:any}) {
+            console.log({sessionToken: token});
+            if(token.sub && session.user) {
+                session.user.id = token.sub;
+            }
+
+            if(token.role && session.user) {
+                session.user.role = token.role;
+            }
+
+            return session;
         },
     },
     adapter: PrismaAdapter(db),
