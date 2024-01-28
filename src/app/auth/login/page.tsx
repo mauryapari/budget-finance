@@ -2,11 +2,11 @@ import { Social } from "@/components/social";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Suspense } from "react";
+
 const LoginPage = () => {
     return (
         <div className="container mx-auto">
@@ -18,7 +18,9 @@ const LoginPage = () => {
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <Social />
+                        <Suspense>
+                            <Social />
+                        </Suspense>
                     </CardContent>
                 </Card>
             </div>
